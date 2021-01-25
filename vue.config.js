@@ -3,7 +3,7 @@ module.exports = {
     'vuetify'
   ],
   pwa: {
-    name: 'Repo.vue',
+    name: 'Journal',
     workboxPluginMode: 'GenerateSW',
     workboxOptions: {
       navigateFallback: '/index.html',
