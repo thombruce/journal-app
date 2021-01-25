@@ -20,17 +20,14 @@ export default {
 
   data () {
     return {
-      document: null
+      document: {
+        content: ''
+      }
     }
-  },
-
-  async created () {
-    this.document = await this.new()
   },
 
   methods: {
     ...mapActions('documents', [
-      'new',
       'create'
     ])
   }

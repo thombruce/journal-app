@@ -1,55 +1,40 @@
 import { v4 as uuidv4 } from 'uuid'
 
-import { Database } from '@/database.js'
-
-const db = new Database()
+import gun from '@/gun.js'
 
 const actions = {
-  async index ({ commit, getters }) {
-    const documents = await db.documents
-      .toArray()
-
-    commit('push', documents)
-
-    return getters.all
+  index ({ commit }) {
+    gun.get('documents')
+      .map()
+      .on((data) => {
+        if (data) commit('insert', data)
+      })
   },
 
-  async show ({ commit, getters }, id) {
-    const document = await db.documents
+  show ({ commit }, id) {
+    gun.get('documents')
       .get(id)
-
-    commit('insert', document)
-
-    return getters.find(id)
+      .on((data) => {
+        if (data) commit('insert', data)
+      })
   },
 
-  new (_, document) {
+  create (_, document) {
     const id = uuidv4()
     const timestamp = new Date().getTime()
 
     document = {
-      ...{
-        id,
-        content: '',
-        createdAt: timestamp,
-        updatedAt: timestamp
-      },
-      ...document
+      ...{ id },
+      ...document,
+      ...{ createdAt: timestamp, updatedAt: timestamp }
     }
 
-    return document
+    gun.get('documents')
+      .get(document.id)
+      .put(document)
   },
 
-  async create ({ dispatch, commit, getters }, document) {
-    document = await dispatch('new', document)
-
-    await db.documents.add(document)
-    commit('insert', document)
-
-    return getters.find(document.id)
-  },
-
-  async update ({ state, commit, getters }, document) {
+  update ({ state }, document) {
     const timestamp = new Date().getTime()
 
     document = {
@@ -58,17 +43,17 @@ const actions = {
       ...{ updatedAt: timestamp }
     }
 
-    await db.documents.update(document.id, document)
-    commit('insert', document)
-
-    return getters.find(document.id)
+    gun.get('documents')
+      .get(document.id)
+      .put(document)
   },
 
-  async destroy ({ commit }, id) {
-    await db.documents.delete(id)
+  destroy ({ commit }, id) {
     commit('delete', id)
 
-    return true
+    gun.get('documents')
+      .get(id)
+      .put(null)
   }
 }
 
