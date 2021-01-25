@@ -1,67 +1,24 @@
 <template lang="pug">
-  VApp
-
-    VNavigationDrawer(app temporary v-model="drawer")
-      VList(nav)
-        VListItemGroup(v-model="group")
-          VListItem(to="/" link)
-            VListItemContent
-              VListItemTitle Home
-
-          VListItem(to="/documents/new" link)
-            VListItemContent
-              VListItemTitle New Document
-
-    VAppBar(
-      app
-      color="primary"
-      dark
-    )
-      VAppBarNavIcon(@click.stop="drawer = !drawer")
-
-      VToolbarTitle
-        | Documents
-
-      VSpacer
-
-      VDarkmodeToggle
-
-      VFullscreenToggle(v-if="!isElectron")
-
-    VMain
-      RouterView
+  div
+    component(:is="layout")
+      router-view
 </template>
 
 <script>
-import isElectron from 'is-electron'
+import ApplicationLayout from './views/layouts/Application.vue'
+import AuthenticationLayout from './views/layouts/Authentication.vue'
 
-import VDarkmodeToggle from './components/controls/VDarkmodeToggle'
-import VFullscreenToggle from './components/controls/VFullscreenToggle'
+const defaultLayout = 'authentication'
 
 export default {
   name: 'App',
-
   components: {
-    VDarkmodeToggle,
-    VFullscreenToggle
+    ApplicationLayout,
+    AuthenticationLayout
   },
-
-  data () {
-    return {
-      drawer: false,
-      group: null
-    }
-  },
-
   computed: {
-    isElectron () {
-      return isElectron()
-    }
-  },
-
-  watch: {
-    group () {
-      this.drawer = false
+    layout () {
+      return (this.$route.meta.layout || defaultLayout) + '-layout'
     }
   }
 }
