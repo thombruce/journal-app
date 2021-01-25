@@ -1,9 +1,19 @@
 <template lang="pug">
   VApp
+    VDarkmodeToggle.d-none
     VMain
-      RouterView
+      VContainer(fill-height)
+        VRow(justify="center")
+          VCol(cols="12" sm="9" md="6")
+            RouterView
 </template>
 
 <script>
-export default {}
+import VDarkmodeToggle from '@/components/controls/VDarkmodeToggle'
+
+export default {
+  components: {
+    VDarkmodeToggle
+  }
+}
 </script>
