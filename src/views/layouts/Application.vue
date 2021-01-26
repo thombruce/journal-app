@@ -13,7 +13,8 @@
               VListItemTitle New Document
       template(v-slot:append)
         .pa-2
-          VBtn(block @click="logout()") Logout
+          VBtn.mb-2(block :to="{ name: 'Account' }") Account
+          VBtn(color="error" block @click="logout()") Logout
 
     VAppBar(
       app

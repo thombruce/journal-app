@@ -15,15 +15,15 @@ const actions = {
     })
   },
 
+  update (_, { username, password, newPassword }) {
+    user.auth(username, password, (ack) => {
+      if (!ack.err) router.push({ name: 'Documents' })
+    }, { change: newPassword })
+  },
+
   logout (_) {
     user.leave()
     if (!user._.sea) router.push({ name: 'Login' })
-  },
-
-  destroy (_, { username, password }) {
-    user.delete(username, password, (ack) => {
-      if (ack.ok) router.push({ name: 'Login' })
-    })
   }
 }
 
