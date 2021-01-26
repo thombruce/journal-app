@@ -3,8 +3,18 @@ VForm(ref="form" :model="user" @submit.prevent="onSubmit()")
   VCard
     VCardText
       h2 Sign up
-      VTextField(v-model="user.username" label="Username")
-      VTextField(v-model="user.password" label="Password" type="password")
+      VTextField(
+        v-model="user.username"
+        label="Username"
+        hint="Make it a good one. There's no way to change this."
+      )
+      VTextField(
+        v-model="user.password"
+        label="Password"
+        type="password"
+        hint="You won't be able to recover your account if you forget this."
+        persistent-hint
+      )
     VCardActions
       VSpacer
       VBtn(color="primary" type="submit") Sign up
