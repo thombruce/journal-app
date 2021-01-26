@@ -1,31 +1,46 @@
 import { v4 as uuidv4 } from 'uuid'
 
+import SEA from 'gun/sea'
+
 import { user } from '@/gun'
 
 const actions = {
   index ({ commit }) {
     user.get('documents')
       .map()
-      .on((data) => {
-        if (data) commit('insert', data)
+      .on(async (data) => {
+        if (data) {
+          data = {
+            ...data,
+            ...{ content: await SEA.decrypt(data.content, user._.sea) }
+          }
+          commit('insert', data)
+        }
       })
   },
 
   show ({ commit }, id) {
     user.get('documents')
       .get(id)
-      .on((data) => {
-        if (data) commit('insert', data)
+      .on(async (data) => {
+        if (data) {
+          data = {
+            ...data,
+            ...{ content: await SEA.decrypt(data.content, user._.sea) }
+          }
+          commit('insert', data)
+        }
       })
   },
 
-  create (_, document) {
+  async create (_, document) {
     const id = uuidv4()
     const timestamp = new Date().getTime()
 
     document = {
       ...{ id },
       ...document,
+      ...{ content: await SEA.encrypt(document.content, user._.sea) },
       ...{ createdAt: timestamp, updatedAt: timestamp }
     }
 
@@ -34,12 +49,13 @@ const actions = {
       .put(document)
   },
 
-  update ({ state }, document) {
+  async update ({ state }, document) {
     const timestamp = new Date().getTime()
 
     document = {
       ...state.list[document.id],
       ...document,
+      ...{ content: await SEA.encrypt(document.content, user._.sea) },
       ...{ updatedAt: timestamp }
     }
 
