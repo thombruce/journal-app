@@ -1,27 +1,37 @@
 import router from '@/router'
 
-import { user } from '@/gun'
+import { gun, user } from '@/gun'
 
 const actions = {
-  login (_, { username, password }) {
+  login ({ commit }, { username, password }) {
+    commit('clearErrors')
     user.auth(username, password, (ack) => {
       if (!ack.err) router.push({ name: 'Documents' })
     })
   },
 
-  create ({ dispatch }, { username, password }) {
-    user.create(username, password, (ack) => {
-      if (!ack.err) dispatch('login', { username, password })
+  create ({ commit, dispatch }, { username, password }) {
+    commit('clearErrors')
+    gun.get('~@' + username).once((data) => {
+      if (!data) {
+        user.create(username, password, (ack) => {
+          if (!ack.err) dispatch('login', { username, password })
+        })
+      } else {
+        commit('addError', { username: 'User already exists' })
+      }
     })
   },
 
-  update (_, { username, password, newPassword }) {
+  update ({ commit }, { username, password, newPassword }) {
+    commit('clearErrors')
     user.auth(username, password, (ack) => {
       if (!ack.err) router.push({ name: 'Documents' })
     }, { change: newPassword })
   },
 
-  logout ({ dispatch }) {
+  logout ({ commit, dispatch }) {
+    commit('clearErrors')
     user.leave()
     if (!user._.sea) {
       dispatch('documents/empty', null, { root: true })

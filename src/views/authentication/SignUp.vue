@@ -7,6 +7,8 @@ VForm(ref="form" :model="user" @submit.prevent="onSubmit()")
         v-model="user.username"
         label="Username"
         hint="Make it a good one. There's no way to change this."
+        :error-count="(errors.username && errors.username.length) || 0"
+        :error-messages="errors.username"
       )
       VTextField(
         v-model="user.password"
@@ -22,7 +24,7 @@ VForm(ref="form" :model="user" @submit.prevent="onSubmit()")
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   data () {
@@ -32,6 +34,12 @@ export default {
         password: ''
       }
     }
+  },
+
+  computed: {
+    ...mapState('user', [
+      'errors'
+    ])
   },
 
   methods: {
