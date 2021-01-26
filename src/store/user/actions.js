@@ -5,7 +5,6 @@ import { user } from '@/gun'
 const actions = {
   login (_, { username, password }) {
     user.auth(username, password, (ack) => {
-      console.log(user)
       if (!ack.err) router.push({ name: 'Documents' })
     })
   },
@@ -18,7 +17,7 @@ const actions = {
 
   logout (_) {
     user.leave()
-    if (user._.sea) router.push({ name: 'Login' })
+    if (!user._.sea) router.push({ name: 'Login' })
   },
 
   destroy (_, { username, password }) {

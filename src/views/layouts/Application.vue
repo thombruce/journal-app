@@ -11,6 +11,9 @@
           VListItem(to="/documents/new" link)
             VListItemContent
               VListItemTitle New Document
+      template(v-slot:append)
+        .pa-2
+          VBtn(block @click="logout()") Logout
 
     VAppBar(
       app
@@ -34,6 +37,8 @@
 
 <script>
 import isElectron from 'is-electron'
+
+import { mapActions } from 'vuex'
 
 import VDarkmodeToggle from '@/components/controls/VDarkmodeToggle'
 import VFullscreenToggle from '@/components/controls/VFullscreenToggle'
@@ -61,6 +66,12 @@ export default {
     group () {
       this.drawer = false
     }
+  },
+
+  methods: {
+    ...mapActions('user', [
+      'logout'
+    ])
   }
 }
 </script>
