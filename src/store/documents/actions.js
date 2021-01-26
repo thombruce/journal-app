@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from 'uuid'
 
-import gun from '@/gun.js'
+import { user } from '@/gun'
 
 const actions = {
   index ({ commit }) {
-    gun.get('documents')
+    user.get('documents')
       .map()
       .on((data) => {
         if (data) commit('insert', data)
@@ -12,7 +12,7 @@ const actions = {
   },
 
   show ({ commit }, id) {
-    gun.get('documents')
+    user.get('documents')
       .get(id)
       .on((data) => {
         if (data) commit('insert', data)
@@ -29,7 +29,7 @@ const actions = {
       ...{ createdAt: timestamp, updatedAt: timestamp }
     }
 
-    gun.get('documents')
+    user.get('documents')
       .get(document.id)
       .put(document)
   },
@@ -43,7 +43,7 @@ const actions = {
       ...{ updatedAt: timestamp }
     }
 
-    gun.get('documents')
+    user.get('documents')
       .get(document.id)
       .put(document)
   },
@@ -51,9 +51,13 @@ const actions = {
   destroy ({ commit }, id) {
     commit('delete', id)
 
-    gun.get('documents')
+    user.get('documents')
       .get(id)
       .put(null)
+  },
+
+  empty ({ commit }) {
+    commit('empty')
   }
 }
 

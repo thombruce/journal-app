@@ -14,6 +14,9 @@ const mutations = {
   },
   delete (state, id) {
     Vue.delete(state.list, id)
+  },
+  empty (state) {
+    state.list = {}
   }
 }
 

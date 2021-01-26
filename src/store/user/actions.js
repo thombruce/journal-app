@@ -21,9 +21,12 @@ const actions = {
     }, { change: newPassword })
   },
 
-  logout (_) {
+  logout ({ dispatch }) {
     user.leave()
-    if (!user._.sea) router.push({ name: 'Login' })
+    if (!user._.sea) {
+      dispatch('documents/empty', null, { root: true })
+      router.push({ name: 'Login' })
+    }
   }
 }
 
