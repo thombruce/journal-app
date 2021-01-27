@@ -2,11 +2,12 @@ import { v4 as uuidv4 } from 'uuid'
 
 import SEA from 'gun/sea'
 
-import { user } from '@/gun'
+import { user, scope } from '@/gun'
 
 const actions = {
   index ({ commit }) {
-    user.get('documents')
+    user.get(scope)
+      .get('documents')
       .map()
       .on(async (data) => {
         if (data) {
@@ -20,7 +21,8 @@ const actions = {
   },
 
   show ({ commit }, id) {
-    user.get('documents')
+    user.get(scope)
+      .get('documents')
       .get(id)
       .on(async (data) => {
         if (data) {
@@ -44,7 +46,8 @@ const actions = {
       ...{ createdAt: timestamp, updatedAt: timestamp }
     }
 
-    user.get('documents')
+    user.get(scope)
+      .get('documents')
       .get(document.id)
       .put(document)
   },
@@ -59,7 +62,8 @@ const actions = {
       ...{ updatedAt: timestamp }
     }
 
-    user.get('documents')
+    user.get(scope)
+      .get('documents')
       .get(document.id)
       .put(document)
   },
@@ -67,7 +71,8 @@ const actions = {
   destroy ({ commit }, id) {
     commit('delete', id)
 
-    user.get('documents')
+    user.get(scope)
+      .get('documents')
       .get(id)
       .put(null)
   },

@@ -4,4 +4,5 @@
 
 # Commented out for now, as I would like to be sure about this before introducing the concept
 # [template.environment]
+#   VUE_APP_NAMESPACE = "The name of your root database node, used to ensure data isolation (e.g. my-app)"
 #   VUE_APP_PEERS = "A comma-delimited list of Gun peers (e.g. https://example.com/gun,https://other.net/gun)"
