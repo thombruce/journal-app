@@ -1,3 +1,7 @@
 [build]
   publish = "dist/"
   command = "yarn build"
+
+# Commented out for now, as I would like to be sure about this before introducing the concept
+# [template.environment]
+#   VUE_APP_PEERS = "A comma-delimited list of Gun peers (e.g. https://example.com/gun,https://other.net/gun)"
