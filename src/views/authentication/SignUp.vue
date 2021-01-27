@@ -1,8 +1,11 @@
 <template lang="pug">
 VForm(ref="form" :model="user" @submit.prevent="onSubmit()")
+  .text-center.mb-5
+    h1.text-h4 Journal
+    span.text-h6 An encrypted, decentralised note-taking app.
   VCard
     VCardText
-      h2 Sign up
+      h2.text-h5 Sign up
       VTextField(
         v-model="user.username"
         label="Username"

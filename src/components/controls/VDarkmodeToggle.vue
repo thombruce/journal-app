@@ -1,14 +1,15 @@
 <template lang="pug">
 v-btn(@click="toggleDarkMode()" icon)
-  v-icon(v-if="$vuetify.theme.dark") mdi-weather-sunny
-  v-icon(v-else) mdi-weather-night
+  v-icon(v-if="system") mdi-theme-light-dark
+  v-icon(v-else-if="$vuetify.theme.dark") mdi-weather-night
+  v-icon(v-else) mdi-weather-sunny
 </template>
 
 <script>
 export default {
   data () {
     return {
-      toggled: false
+      system: true
     }
   },
 
@@ -21,7 +22,7 @@ export default {
       const darkMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
 
       darkMediaQuery.addEventListener('change', (e) => {
-        if (!this.toggled) {
+        if (this.system) {
           this.$vuetify.theme.dark = !this.$vuetify.theme.dark
         }
       })
@@ -33,7 +34,7 @@ export default {
 
     toggleDarkMode () {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark
-      this.toggled = true
+      this.system = false
     }
   }
 }

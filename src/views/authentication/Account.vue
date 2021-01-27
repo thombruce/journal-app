@@ -2,7 +2,7 @@
 VForm(ref="form" :model="user" @submit.prevent="changePassword()")
   VCard
     VCardText
-      h2 Account
+      h2.text-h5 Account
 
       VTextField(
         v-model="user.username"
