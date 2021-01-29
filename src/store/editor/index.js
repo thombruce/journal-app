@@ -3,11 +3,10 @@ import getters from './getters'
 import mutations from './mutations'
 
 const state = () => ({
-  list: {},
-  currentId: null
+  editor: null
 })
 
-const documents = {
+const editor = {
   namespaced: true,
   state,
   getters,
@@ -15,4 +14,4 @@ const documents = {
   mutations
 }
 
-export default documents
+export default editor

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import ApplicationLayout from './views/layouts/Application.vue'
+import EditorLayout from './views/layouts/Editor.vue'
 import AuthenticationLayout from './views/layouts/Authentication.vue'
 
 const defaultLayout = 'authentication'
@@ -13,7 +13,7 @@ const defaultLayout = 'authentication'
 export default {
   name: 'App',
   components: {
-    ApplicationLayout,
+    EditorLayout,
     AuthenticationLayout
   },
   computed: {

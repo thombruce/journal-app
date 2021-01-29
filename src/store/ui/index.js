@@ -1,18 +1,17 @@
-import actions from './actions'
+// import actions from './actions'
 import getters from './getters'
 import mutations from './mutations'
 
 const state = () => ({
-  list: {},
-  currentId: null
+  drawer: true
 })
 
-const documents = {
+const ui = {
   namespaced: true,
   state,
   getters,
-  actions,
+  // actions,
   mutations
 }
 
-export default documents
+export default ui

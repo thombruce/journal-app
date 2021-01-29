@@ -1,40 +1,42 @@
 <template lang="pug">
-div
-  VContainer
-    h2 Edit Document
-
-    DocumentForm(v-if="document" :document="document" :submit="update")
-
-    RouterLink(:to="{ name: 'Documents' }") Back
+VContainer.pa-0(fluid fill-height)
+  VEditor
 </template>
 
 <script>
-import DocumentForm from './_form.vue'
+import VEditor from '@/components/VEditor'
 
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   components: {
-    DocumentForm
+    VEditor
   },
 
-  computed: {
-    ...mapGetters('documents', {
-      find: 'find'
-    }),
-    document () {
-      return this.find(this.$route.params.id)
+  mounted () {
+    this.show(this.$route.params.id)
+    this.initializeEditor()
+  },
+
+  watch: {
+    '$route.params.id' (id) {
+      this.teardownEditor()
+      this.show(id)
+      this.initializeEditor()
     }
   },
 
-  created () {
-    this.show(this.$route.params.id)
+  beforeDestroy () {
+    this.teardownEditor()
   },
 
   methods: {
     ...mapActions('documents', [
-      'show',
-      'update'
+      'show'
+    ]),
+    ...mapActions('editor', [
+      'initializeEditor',
+      'teardownEditor'
     ])
   }
 }

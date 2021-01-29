@@ -18,28 +18,18 @@ const routes = [
     path: '/documents',
     name: 'Documents',
     component: Documents,
-    meta: { layout: 'application' }
-  },
-  {
-    path: '/documents/new',
-    name: 'NewDocument',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "newDocument" */ '../views/documents/New.vue'),
-    meta: { layout: 'application' }
-  },
-  {
-    path: '/documents/:id',
-    name: 'ShowDocument',
-    component: () => import(/* webpackChunkName: "showDocument" */ '../views/documents/Show.vue'),
-    meta: { layout: 'application' }
-  },
-  {
-    path: '/documents/:id/edit',
-    name: 'EditDocument',
-    component: () => import(/* webpackChunkName: "editDocument" */ '../views/documents/Edit.vue'),
-    meta: { layout: 'application' }
+    meta: { layout: 'editor' },
+    children: [
+      {
+        path: '/documents/:id',
+        name: 'EditDocument',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "editDocument" */ '../views/documents/Edit.vue'),
+        meta: { layout: 'editor' }
+      }
+    ]
   },
   {
     path: '/login',

@@ -1,3 +1,5 @@
+import router from '@/router'
+
 import { v4 as uuidv4 } from 'uuid'
 
 import SEA from 'gun/sea'
@@ -5,61 +7,63 @@ import SEA from 'gun/sea'
 import { user, scope } from '@/gun'
 
 const actions = {
-  index ({ commit }) {
+  index ({ commit, getters }) {
     user.get(scope)
       .get('documents')
       .map()
-      .on(async (data) => {
-        if (data) {
-          data = {
-            ...data,
-            ...{ content: await SEA.decrypt(data.content, user._.sea) }
+      .on(async (document) => {
+        if (document) {
+          document = {
+            ...document,
+            ...{
+              content: await SEA.decrypt(document.content, user._.sea),
+              text: await SEA.decrypt(document.text, user._.sea)
+            }
           }
-          commit('insert', data)
+          commit('insert', document)
         }
       })
   },
 
   show ({ commit }, id) {
-    user.get(scope)
-      .get('documents')
-      .get(id)
-      .on(async (data) => {
-        if (data) {
-          data = {
-            ...data,
-            ...{ content: await SEA.decrypt(data.content, user._.sea) }
-          }
-          commit('insert', data)
-        }
-      })
+    commit('setCurrent', id)
   },
 
-  async create (_, document) {
+  create ({ dispatch, commit }, document) {
     const id = uuidv4()
     const timestamp = new Date().getTime()
 
     document = {
       ...{ id },
       ...document,
-      ...{ content: await SEA.encrypt(document.content, user._.sea) },
       ...{ createdAt: timestamp, updatedAt: timestamp }
     }
 
-    user.get(scope)
-      .get('documents')
-      .get(document.id)
-      .put(document)
+    commit('insert', document)
+    dispatch('save', document)
+    router.push({ name: 'EditDocument', params: { id: document.id } })
   },
 
-  async update ({ state }, document) {
+  update ({ dispatch, commit, state }, document) {
     const timestamp = new Date().getTime()
 
     document = {
       ...state.list[document.id],
       ...document,
-      ...{ content: await SEA.encrypt(document.content, user._.sea) },
       ...{ updatedAt: timestamp }
+    }
+
+    commit('insert', document)
+    dispatch('save', document)
+  },
+
+  async save (_, document) {
+    document = {
+      ...document,
+      ...{
+        content: await SEA.encrypt(document.content, user._.sea),
+        text: await SEA.encrypt(document.text, user._.sea)
+      }
     }
 
     user.get(scope)
@@ -74,11 +78,17 @@ const actions = {
     user.get(scope)
       .get('documents')
       .get(id)
-      .put(null)
+      .put(null, (ack) => {
+        if (ack.err) {
+          // TODO: Handle error
+        } else {
+          router.push({ name: 'Documents' })
+        }
+      })
   },
 
-  empty ({ commit }) {
-    commit('empty')
+  clear ({ commit }) {
+    commit('clear')
   }
 }
 

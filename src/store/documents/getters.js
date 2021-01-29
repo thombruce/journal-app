@@ -1,9 +1,14 @@
 const getters = {
-  all: (state) => {
-    return Object.values(state.list)
+  all: (state, _getters, _rootState, _rootGetters) => {
+    const documents = Object.values(state.list)
+
+    return documents.sort((a, b) => {
+      return b.updatedAt - a.updatedAt
+    })
   },
-  find: (state) => (id) => {
-    return state.list[id]
+
+  current: (state) => {
+    return state.list[state.currentId]
   }
 }
 

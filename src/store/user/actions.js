@@ -34,7 +34,7 @@ const actions = {
     commit('clearErrors')
     user.leave()
     if (!user._.sea) {
-      dispatch('documents/empty', null, { root: true })
+      dispatch('documents/clear', null, { root: true })
       router.push({ name: 'Login' })
     }
   }
