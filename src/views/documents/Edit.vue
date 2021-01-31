@@ -6,19 +6,32 @@ VContainer.pa-0(fluid fill-height)
 <script>
 import VEditor from '@/components/VEditor'
 
-import { mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
     VEditor
   },
 
+  computed: {
+    ...mapState('editor', [
+      'editor'
+    ]),
+    ...mapGetters('documents', {
+      document: 'current'
+    })
+  },
+
   mounted () {
     this.show(this.$route.params.id)
-    this.initializeEditor()
+    if (this.document) this.initializeEditor()
   },
 
   watch: {
+    document () {
+      if (this.editor) this.teardownEditor()
+      if (this.document) this.initializeEditor()
+    },
     '$route.params.id' (id) {
       this.teardownEditor()
       this.show(id)

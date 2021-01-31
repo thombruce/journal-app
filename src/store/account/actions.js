@@ -1,4 +1,4 @@
-// import router from '@/router'
+import router from '@/router'
 
 import { gun, user } from '@/gun'
 
@@ -39,6 +39,7 @@ const actions = {
     commit('clearErrors')
     commit('setUser', null)
     user.leave()
+    router.push({ name: 'Documents' })
   }
 }
 

@@ -15,11 +15,11 @@
       | Documents will not be encrypted until you sign in.
       template(v-slot:action="{ attrs }")
         VBtn(
-          text
+          icon
           v-bind="attrs"
           @click="snackActive = false"
         )
-          | Close
+          VIcon mdi-close
 </template>
 
 <script>
