@@ -23,12 +23,14 @@ export default {
   },
 
   mounted () {
+    // TODO: Refactor initial document loading
     this.show(this.$route.params.id)
     if (this.document) this.initializeEditor()
   },
 
   watch: {
     document () {
+      // TODO: Refactor initial document loading
       if (this.editor) this.teardownEditor()
       if (this.document) this.initializeEditor()
     },
