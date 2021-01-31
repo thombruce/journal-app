@@ -1,4 +1,4 @@
-import router from '@/router'
+// import router from '@/router'
 
 import { gun, user } from '@/gun'
 
@@ -6,7 +6,7 @@ const actions = {
   login ({ commit }, { username, password }) {
     commit('clearErrors')
     user.auth(username, password, (ack) => {
-      if (!ack.err) router.push({ name: 'Documents' })
+      commit('setUser', ack.put)
     })
   },
 
@@ -25,18 +25,15 @@ const actions = {
 
   update ({ commit }, { username, password, newPassword }) {
     commit('clearErrors')
-    user.auth(username, password, (ack) => {
-      if (!ack.err) router.push({ name: 'Documents' })
+    user.auth(username, password, (_ack) => {
+      // if (ack.err) doSomethingWithError()
     }, { change: newPassword })
   },
 
-  logout ({ commit, dispatch }) {
+  logout ({ commit }) {
     commit('clearErrors')
+    commit('setUser', null)
     user.leave()
-    if (!user._.sea) {
-      dispatch('documents/clear', null, { root: true })
-      router.push({ name: 'Login' })
-    }
   }
 }
 

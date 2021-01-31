@@ -2,34 +2,20 @@ import router from '@/router'
 
 import { v4 as uuidv4 } from 'uuid'
 
-import SEA from 'gun/sea'
-
-import { user, scope } from '@/gun'
-
 const actions = {
-  index ({ commit, getters }) {
-    user.get(scope)
-      .get('documents')
-      .map()
-      .on(async (document) => {
-        if (document) {
-          document = {
-            ...document,
-            ...{
-              content: await SEA.decrypt(document.content, user._.sea),
-              text: await SEA.decrypt(document.text, user._.sea)
-            }
-          }
-          commit('insert', document)
-        }
-      })
+  index ({ dispatch, rootState }) {
+    if (rootState.account.user) {
+      dispatch('graph/index', null, { root: true })
+    } else {
+      dispatch('local/index', null, { root: true })
+    }
   },
 
   show ({ commit }, id) {
     commit('setCurrent', id)
   },
 
-  create ({ dispatch, commit }, document) {
+  create ({ dispatch, commit, rootState }, document) {
     const id = uuidv4()
     const timestamp = new Date().getTime()
 
@@ -40,11 +26,17 @@ const actions = {
     }
 
     commit('insert', document)
-    dispatch('save', document)
+
+    if (rootState.account.user) {
+      dispatch('graph/save', document, { root: true })
+    } else {
+      dispatch('local/save', document, { root: true })
+    }
+
     router.push({ name: 'EditDocument', params: { id: document.id } })
   },
 
-  update ({ dispatch, commit, state }, document) {
+  update ({ dispatch, commit, state, rootState }, document) {
     const timestamp = new Date().getTime()
 
     document = {
@@ -54,37 +46,24 @@ const actions = {
     }
 
     commit('insert', document)
-    dispatch('save', document)
-  },
 
-  async save (_, document) {
-    document = {
-      ...document,
-      ...{
-        content: await SEA.encrypt(document.content, user._.sea),
-        text: await SEA.encrypt(document.text, user._.sea)
-      }
+    if (rootState.account.user) {
+      dispatch('graph/save', document, { root: true })
+    } else {
+      dispatch('local/save', document, { root: true })
     }
-
-    user.get(scope)
-      .get('documents')
-      .get(document.id)
-      .put(document)
   },
 
-  destroy ({ commit }, id) {
+  destroy ({ dispatch, commit, rootState }, id) {
     commit('delete', id)
 
-    user.get(scope)
-      .get('documents')
-      .get(id)
-      .put(null, (ack) => {
-        if (ack.err) {
-          // TODO: Handle error
-        } else {
-          router.push({ name: 'Documents' })
-        }
-      })
+    if (rootState.account.user) {
+      dispatch('graph/destroy', id, { root: true })
+    } else {
+      dispatch('local/destroy', id, { root: true })
+    }
+
+    router.push({ name: 'Documents' })
   },
 
   clear ({ commit }) {

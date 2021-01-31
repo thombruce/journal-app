@@ -3,13 +3,30 @@ RouterView(v-if="$route.params.id")
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
+  computed: {
+    ...mapState('account', [
+      'user'
+    ])
+  },
+
   methods: {
     ...mapActions('documents', [
-      'index'
+      'index',
+      'clear'
     ])
+  },
+
+  watch: {
+    user () {
+      if (this.user) {
+        this.index()
+      } else {
+        this.clear()
+      }
+    }
   },
 
   created () {

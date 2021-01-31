@@ -6,7 +6,7 @@ export class Database extends Dexie {
     super('database')
 
     this.version(1).stores({
-      documents: '$$id,content,createdAt,updatedAt'
+      documents: '$$id,content,text,createdAt,updatedAt'
     })
 
     this.documents = this.table('documents')

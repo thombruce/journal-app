@@ -12,6 +12,8 @@ VAppBar(app flat dense clipped-left)
 
     VSpacer.d-none.d-sm-block
 
+  VAccountMenu
+
   VConfirmBtn(v-if="currentDocument" :action="destroyDocument")
     template(#button="{ on, attrs }")
       VBtn.error--text(
@@ -31,11 +33,13 @@ VAppBar(app flat dense clipped-left)
 import { mapState, mapActions, mapMutations } from 'vuex'
 
 import VEditorMenuBar from '@/components/editor/VEditorMenuBar'
+import VAccountMenu from '@/components/controls/VAccountMenu'
 import VConfirmBtn from '@/components/local/VConfirmBtn'
 
 export default {
   components: {
     VEditorMenuBar,
+    VAccountMenu,
     VConfirmBtn
   },
 

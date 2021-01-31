@@ -3,8 +3,6 @@ import VueRouter from 'vue-router'
 
 import isElectron from 'is-electron'
 
-import { user as gunUser } from '@/gun'
-
 import Documents from '../views/documents/Index.vue'
 
 Vue.use(VueRouter)
@@ -30,24 +28,6 @@ const routes = [
         meta: { layout: 'editor' }
       }
     ]
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: () => import(/* webpackChunkName: "login" */ '../views/authentication/Login.vue'),
-    meta: { layout: 'authentication' }
-  },
-  {
-    path: '/signup',
-    name: 'SignUp',
-    component: () => import(/* webpackChunkName: "signUp" */ '../views/authentication/SignUp.vue'),
-    meta: { layout: 'authentication' }
-  },
-  {
-    path: '/account',
-    name: 'Account',
-    component: () => import(/* webpackChunkName: "account" */ '../views/authentication/Account.vue'),
-    meta: { layout: 'authentication' }
   }
 ]
 
@@ -55,19 +35,6 @@ const router = new VueRouter({
   mode: isElectron() ? 'hash' : 'history',
   base: process.env.BASE_URL,
   routes
-})
-
-router.beforeEach((to, from, next) => {
-  // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ['Login', 'SignUp']
-  const authRequired = !publicPages.includes(to.name)
-  const loggedIn = gunUser.is
-
-  if (authRequired && !loggedIn) {
-    return next({ name: 'Login' })
-  }
-
-  next()
 })
 
 export default router

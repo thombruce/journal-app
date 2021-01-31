@@ -6,15 +6,13 @@
 
 <script>
 import EditorLayout from './views/layouts/Editor.vue'
-import AuthenticationLayout from './views/layouts/Authentication.vue'
 
-const defaultLayout = 'authentication'
+const defaultLayout = 'editor'
 
 export default {
   name: 'App',
   components: {
-    EditorLayout,
-    AuthenticationLayout
+    EditorLayout
   },
   computed: {
     layout () {

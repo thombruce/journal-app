@@ -1,16 +1,14 @@
 <template lang="pug">
-VForm(ref="form" :model="user" @submit.prevent="changePassword()")
-  VCard
+  VForm(:model="user" @submit.prevent="changePassword()")
+    VCardTitle.headline
+      | Account
     VCardText
-      h2.text-h5 Account
-
       VTextField(
         v-model="user.username"
         label="Username"
         readonly
         hint="This can't be changed."
       )
-
       h3 Change password
       VTextField(v-model="user.password" label="Password" type="password")
       VTextField(
@@ -19,11 +17,10 @@ VForm(ref="form" :model="user" @submit.prevent="changePassword()")
         type="password"
         hint="Remember, you won't be able to recover your account if you forget this."
       )
-
     VCardActions
       VSpacer
       VBtn(color="primary" type="submit") Update password
-      VBtn(:to="{ name: 'Documents' }" text small) Back
+      VBtn(color="error" @click="logout()") Logout
 </template>
 
 <script>
@@ -43,11 +40,13 @@ export default {
   },
 
   methods: {
-    ...mapActions('user', [
-      'update'
+    ...mapActions('account', [
+      'update',
+      'logout'
     ]),
     changePassword () {
       this.update(this.user)
+      this.$emit('close-dialog')
     }
   }
 }

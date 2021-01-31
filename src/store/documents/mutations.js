@@ -1,6 +1,10 @@
 import Vue from 'vue'
 
 const mutations = {
+  push (state, documents) {
+    state.list = { ...state.list, ...documents }
+  },
+
   insert (state, payload) {
     Vue.set(state.list, payload.id, payload)
   },

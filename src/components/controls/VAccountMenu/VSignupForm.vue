@@ -1,11 +1,8 @@
 <template lang="pug">
-VForm(ref="form" :model="user" @submit.prevent="onSubmit()")
-  .text-center.mb-5
-    h1.text-h4 Journal
-    span.text-h6 An encrypted, decentralised note-taking app.
-  VCard
+  VForm(:model="user" @submit.prevent="onSubmit()")
+    VCardTitle.headline
+      | Sign up
     VCardText
-      h2.text-h5 Sign up
       VTextField(
         v-model="user.username"
         label="Username"
@@ -23,7 +20,7 @@ VForm(ref="form" :model="user" @submit.prevent="onSubmit()")
     VCardActions
       VSpacer
       VBtn(color="primary" type="submit") Sign up
-      VBtn(:to="{ name: 'Login' }" text small) Already have an account?
+      VBtn(text small @click="$emit('switch-view')") Already have an account?
 </template>
 
 <script>
@@ -40,18 +37,18 @@ export default {
   },
 
   computed: {
-    ...mapState('user', [
+    ...mapState('account', [
       'errors'
     ])
   },
 
   methods: {
-    ...mapActions('user', [
-      'create',
-      'login'
+    ...mapActions('account', [
+      'create'
     ]),
     onSubmit () {
       this.create(this.user)
+      this.$emit('close-dialog')
     }
   }
 }
