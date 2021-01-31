@@ -28,6 +28,21 @@ const actions = {
 
   destroy (_, id) {
     db.documents.delete(id)
+  },
+
+  clear (_) {
+    db.documents.clear()
+  },
+
+  sync ({ dispatch }) {
+    db.documents
+      .toArray()
+      .then(documents => {
+        documents.forEach(document => {
+          dispatch('graph/save', document, { root: true })
+        })
+        dispatch('clear')
+      })
   }
 }
 

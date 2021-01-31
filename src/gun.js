@@ -12,7 +12,7 @@ const scope = process.env.VUE_APP_NAMESPACE || 'journal'
 
 const gun = Gun(peers)
 const user = gun.user().recall({ sessionStorage: true }, (ack) => {
-  store.commit('account/setUser', ack.put)
+  store.dispatch('account/authenticated', ack)
 })
 
 /* Export */

@@ -3,10 +3,10 @@
 import { gun, user } from '@/gun'
 
 const actions = {
-  login ({ commit }, { username, password }) {
+  login ({ dispatch, commit }, { username, password }) {
     commit('clearErrors')
     user.auth(username, password, (ack) => {
-      commit('setUser', ack.put)
+      dispatch('authenticated', ack)
     })
   },
 
@@ -28,6 +28,11 @@ const actions = {
     user.auth(username, password, (_ack) => {
       // if (ack.err) doSomethingWithError()
     }, { change: newPassword })
+  },
+
+  authenticated ({ dispatch, commit }, ack) {
+    commit('setUser', ack.put)
+    dispatch('local/sync', null, { root: true })
   },
 
   logout ({ commit }) {
