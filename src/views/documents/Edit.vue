@@ -19,20 +19,23 @@ export default {
     ]),
     ...mapGetters('documents', {
       document: 'current'
-    })
+    }),
+    documentLoaded () {
+      return !!this.document
+    }
   },
 
   mounted () {
     // TODO: Refactor initial document loading
     this.show(this.$route.params.id)
-    if (this.document) this.initializeEditor()
+    if (this.documentLoaded) this.initializeEditor()
   },
 
   watch: {
-    document () {
+    documentLoaded () {
       // TODO: Refactor initial document loading
       if (this.editor) this.teardownEditor()
-      if (this.document) this.initializeEditor()
+      if (this.documentLoaded) this.initializeEditor()
     },
     '$route.params.id' (id) {
       this.teardownEditor()
