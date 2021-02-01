@@ -10,17 +10,16 @@ const actions = {
     // first initialize the queried objects. So do that here.
     // See also [1]. Solution derived from:
     // https://github.com/amark/gun/issues/690#issuecomment-455115069
-    user.get(scope).get('trees').get('documents').get('updatedAt').put({})
-    user.get(scope).get('trees').get('documents').get('createdAt').put({})
+    user.get(scope).get('trees').get('timestamps').put({})
   },
 
   index ({ commit }) {
     user.get(scope)
       .get('trees')
-      .get('documents')
-      .get('updatedAt')
+      .get('timestamps')
       .get({ '.': { '<': new Date().getTime(), '-': 1 }, '%': 100000 }) // 100000 appears to be the max byte limit.
       .map()
+      .get('createdAt')
       .map()
       .on(async (document) => {
         if (document) {
@@ -68,9 +67,9 @@ const actions = {
             if (previouslyUpdatedAt) {
               user.get(scope)
                 .get('trees')
-                .get('documents')
-                .get('updatedAt')
+                .get('timestamps')
                 .get(previouslyUpdatedAt)
+                .get('updatedAt')
                 .get(document.id)
                 .put(null)
             }
@@ -79,9 +78,9 @@ const actions = {
             timestamps.forEach(timestamp => {
               user.get(scope)
                 .get('trees')
-                .get('documents')
-                .get(timestamp)
+                .get('timestamps')
                 .get(document[timestamp])
+                .get(timestamp)
                 .get(document.id)
                 .put(documentNode)
             })
@@ -103,15 +102,13 @@ const actions = {
 
         // Nullify node reference in the time tree for createdAt and updatedAt.
         timestamps.forEach(timestamp => {
-          console.log(
-            user.get(scope)
-              .get('trees')
-              .get('documents')
-              .get(timestamp)
-              .get(document[timestamp])
-              .get(document.id)
-              .put(null)
-          )
+          user.get(scope)
+            .get('trees')
+            .get('timestamps')
+            .get(document[timestamp])
+            .get(timestamp)
+            .get(document.id)
+            .put(null)
         })
 
         // Nullify the main document.
