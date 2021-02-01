@@ -12,7 +12,7 @@ import 'gun/sea'
 import store from './store'
 
 /* Variables */
-const scope = process.env.VUE_APP_NAMESPACE || 'journal'
+const scope = process.env.VUE_APP_NAMESPACE || 'com.thombruce.journal'
 const peers = process.env.VUE_APP_PEERS && process.env.VUE_APP_PEERS
   .split(',')
   .reduce((obj, item) => {
