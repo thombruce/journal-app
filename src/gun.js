@@ -1,4 +1,12 @@
 import Gun from 'gun/gun'
+
+import 'gun/lib/radix'
+import 'gun/lib/radisk'
+import 'gun/lib/store'
+import 'gun/lib/rindexed'
+
+// import 'gun/lib/unset' // See: src/store/graph/actions.js footnote [1]
+
 import 'gun/sea'
 
 import store from './store'

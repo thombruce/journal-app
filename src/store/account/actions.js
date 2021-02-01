@@ -32,6 +32,7 @@ const actions = {
 
   authenticated ({ dispatch, commit }, ack) {
     commit('setUser', ack.put)
+    dispatch('graph/init', null, { root: true })
     dispatch('local/sync', null, { root: true })
   },
 
