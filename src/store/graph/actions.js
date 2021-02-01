@@ -10,12 +10,13 @@ const actions = {
     // first initialize the queried objects. So do that here.
     // See also [1]. Solution derived from:
     // https://github.com/amark/gun/issues/690#issuecomment-455115069
-    user.get(scope).get('documents').get('updatedAt').put({})
-    user.get(scope).get('documents').get('createdAt').put({})
+    user.get(scope).get('trees').get('documents').get('updatedAt').put({})
+    user.get(scope).get('trees').get('documents').get('createdAt').put({})
   },
 
   index ({ commit }) {
     user.get(scope)
+      .get('trees')
       .get('documents')
       .get('updatedAt')
       .get({ '.': { '<': new Date().getTime(), '-': 1 }, '%': 100000 }) // 100000 appears to be the max byte limit.
@@ -66,6 +67,7 @@ const actions = {
             // Nullify the previous updatedAt.
             if (previouslyUpdatedAt) {
               user.get(scope)
+                .get('trees')
                 .get('documents')
                 .get('updatedAt')
                 .get(previouslyUpdatedAt)
@@ -76,6 +78,7 @@ const actions = {
             // Store node reference in the time tree for createdAt and updatedAt.
             timestamps.forEach(timestamp => {
               user.get(scope)
+                .get('trees')
                 .get('documents')
                 .get(timestamp)
                 .get(document[timestamp])
@@ -102,6 +105,7 @@ const actions = {
         timestamps.forEach(timestamp => {
           console.log(
             user.get(scope)
+              .get('trees')
               .get('documents')
               .get(timestamp)
               .get(document[timestamp])
