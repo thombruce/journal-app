@@ -6,8 +6,8 @@ const actions = {
 
     const editor = new Editor({
       content: document.content,
-      onUpdate: ({ state, getJSON }) => {
-        dispatch(
+      onUpdate: async ({ state, getJSON }) => {
+        await dispatch(
           'documents/update',
           {
             id: document.id,
@@ -16,6 +16,7 @@ const actions = {
           },
           { root: true }
         )
+        commit('markAsModified')
       }
     })
     commit('init', editor)

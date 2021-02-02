@@ -4,7 +4,7 @@ import { user, scope } from '@/gun'
 
 import { save } from './functions'
 
-const timestamps = ['createdAt', 'updatedAt']
+const timestamps = ['createdAt', 'modifiedAt']
 
 const actions = {
   init () {
@@ -21,7 +21,7 @@ const actions = {
       .get('timestamps')
       .get({ '.': { '<': new Date().getTime(), '-': 1 }, '%': 100000 }) // 100000 appears to be the max byte limit.
       .map()
-      .get('updatedAt')
+      .get('modifiedAt')
       .map()
       .on(async (document) => {
         if (document) {
@@ -53,7 +53,7 @@ const actions = {
           .get('documents')
           .get(id)
 
-        // Nullify node reference in the time tree for createdAt and updatedAt.
+        // Nullify node reference in the time tree for createdAt and modifiedAt.
         timestamps.forEach(timestamp => {
           user.get(scope)
             .get('trees')

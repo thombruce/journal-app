@@ -4,13 +4,13 @@ import SEA from 'gun/sea'
 
 import { user, scope } from '@/gun'
 
-const timestamps = ['createdAt', 'updatedAt']
+const timestamps = ['createdAt', 'modifiedAt']
 
 /* Main Functions */
 
 const debouncedSave = _.debounce(function (document) {
   save(document)
-}, 500, { maxWait: 2000 })
+}, 500, { leading: true, maxWait: 2000 })
 
 const save = async function (document) {
   document = await encryptDocument(document)
@@ -20,6 +20,8 @@ const save = async function (document) {
     .get('documents')
     .get(document.id)
     .once((prev) => {
+      // Set previous modifiedAt value as a constant (updates in this callback update the prev object)
+      const previouslyModifiedAt = prev && prev.modifiedAt
       // Then, insert the modified document.
       user.get(scope)
         .get('documents')
@@ -30,7 +32,11 @@ const save = async function (document) {
             .get('documents')
             .get(document.id)
           // Store or update time tree.
-          prev ? updateTimestamps(document, documentNode, prev) : createTimestamps(document, documentNode)
+          if (prev && previouslyModifiedAt !== document.modifiedAt) {
+            updateTimestamps(document, documentNode, previouslyModifiedAt)
+          } else if (!prev) {
+            createTimestamps(document, documentNode)
+          }
         })
     })
 }
@@ -38,17 +44,23 @@ const save = async function (document) {
 /* Support Functions */
 
 const createTimestamps = function (document, documentNode) {
-  // Store node reference in the time tree for createdAt and updatedAt.
+  // Store node reference in the time tree for createdAt and modifiedAt.
   timestamps.forEach(timestamp => {
     insertTimestamp(document, documentNode, timestamp)
   })
 }
 
-const updateTimestamps = function (document, documentNode, prev) {
-  // Nullify the previous updatedAt.
-  insertTimestamp(prev, null, 'updatedAt')
-  // Store node reference in the time tree for new updatedAt.
-  insertTimestamp(document, documentNode, 'updatedAt')
+const updateTimestamps = function (document, documentNode, previouslyModifiedAt) {
+  // Nullify the previous modifiedAt.
+  user.get(scope)
+    .get('trees')
+    .get('timestamps')
+    .get(previouslyModifiedAt)
+    .get('modifiedAt')
+    .get(document.id)
+    .put(null)
+  // Store node reference in the time tree for new modifiedAt.
+  insertTimestamp(document, documentNode, 'modifiedAt')
 }
 
 const insertTimestamp = function (document, documentNode, timestamp) {

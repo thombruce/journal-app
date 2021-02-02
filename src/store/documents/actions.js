@@ -22,26 +22,38 @@ const actions = {
     document = {
       ...{ id },
       ...document,
-      ...{ createdAt: timestamp, updatedAt: timestamp }
+      ...{
+        createdAt: timestamp,
+        updatedAt: timestamp,
+        modifiedAt: timestamp
+      }
     }
 
     commit('insert', document)
     commit('setCurrent', id)
     dispatch('save')
+    commit('editor/markAsModified', null, { root: true })
 
     router.push({ name: 'EditDocument', params: { id: document.id } })
   },
 
-  update ({ commit, state }, document) {
+  update ({ commit, state, rootState }, document) {
     const timestamp = new Date().getTime()
+
+    const modifiedTimestamps = {
+      ...{ updatedAt: timestamp },
+      ...(rootState.editor.modified ? {} : { modifiedAt: timestamp })
+    }
 
     document = {
       ...state.list[document.id],
       ...document,
-      ...{ updatedAt: timestamp }
+      ...modifiedTimestamps
     }
 
     commit('update', document)
+
+    return true
   },
 
   destroy ({ dispatch, commit, rootState }, id) {

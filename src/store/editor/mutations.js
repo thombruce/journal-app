@@ -3,9 +3,14 @@ const mutations = {
     state.editor = editor
   },
 
+  markAsModified (state) {
+    state.modified = true
+  },
+
   deinit (state) {
     state.editor.destroy()
     state.editor = null
+    state.modified = false
   }
 }
 
