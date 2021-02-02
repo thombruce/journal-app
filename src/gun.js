@@ -13,12 +13,7 @@ import store from './store'
 
 /* Variables */
 const scope = process.env.VUE_APP_NAMESPACE || 'com.thombruce.journal'
-const peers = process.env.VUE_APP_PEERS && process.env.VUE_APP_PEERS
-  .split(',')
-  .reduce((obj, item) => {
-    obj[item] = {}
-    return obj
-  }, {})
+const peers = process.env.VUE_APP_PEERS && process.env.VUE_APP_PEERS.split(',')
 
 /* Global Initialization */
 
