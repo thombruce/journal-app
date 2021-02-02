@@ -73,4 +73,4 @@ const encryptDocument = async function (document) {
   return encrypted
 }
 
-export { debouncedSave }
+export { debouncedSave, save }

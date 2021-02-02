@@ -26,13 +26,13 @@ const actions = {
     }
 
     commit('insert', document)
-
+    commit('setCurrent', id)
     dispatch('save')
 
     router.push({ name: 'EditDocument', params: { id: document.id } })
   },
 
-  update ({ dispatch, commit, state }, document) {
+  update ({ commit, state }, document) {
     const timestamp = new Date().getTime()
 
     document = {
@@ -41,19 +41,17 @@ const actions = {
       ...{ updatedAt: timestamp }
     }
 
-    commit('insert', document)
-
-    dispatch('save')
+    commit('update', document)
   },
 
   destroy ({ dispatch, commit, rootState }, id) {
-    commit('delete', id)
-
     if (rootState.account.user) {
       dispatch('graph/destroy', id, { root: true })
     } else {
       dispatch('local/destroy', id, { root: true })
     }
+
+    commit('delete', id)
 
     router.push({ name: 'Documents' })
   },

@@ -2,7 +2,7 @@ import SEA from 'gun/sea'
 
 import { user, scope } from '@/gun'
 
-import { debouncedSave } from './functions'
+import { save } from './functions'
 
 const timestamps = ['createdAt', 'updatedAt']
 
@@ -38,7 +38,7 @@ const actions = {
   },
 
   save (_, document) {
-    debouncedSave(document)
+    save(document)
   },
 
   destroy ({ commit }, id) {

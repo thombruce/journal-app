@@ -1,6 +1,6 @@
 import { Database } from '@/dexie.js'
 
-import { debouncedSave } from './functions'
+import { save } from './functions'
 
 const db = new Database()
 
@@ -21,7 +21,7 @@ const actions = {
   },
 
   save (_, document) {
-    debouncedSave(document)
+    save(document)
   },
 
   destroy (_, id) {

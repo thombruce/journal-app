@@ -8,6 +8,8 @@ import graph from './graph'
 import local from './local'
 import editor from './editor'
 
+import autosave from './plugins/autosave'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -18,5 +20,6 @@ export default new Vuex.Store({
     graph,
     local,
     editor
-  }
+  },
+  plugins: [autosave]
 })
