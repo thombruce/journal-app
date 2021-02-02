@@ -2,6 +2,8 @@ import SEA from 'gun/sea'
 
 import { user, scope } from '@/gun'
 
+import { debouncedSave } from './functions'
+
 const timestamps = ['createdAt', 'updatedAt']
 
 const actions = {
@@ -19,7 +21,7 @@ const actions = {
       .get('timestamps')
       .get({ '.': { '<': new Date().getTime(), '-': 1 }, '%': 100000 }) // 100000 appears to be the max byte limit.
       .map()
-      .get('createdAt')
+      .get('updatedAt')
       .map()
       .on(async (document) => {
         if (document) {
@@ -35,57 +37,8 @@ const actions = {
       })
   },
 
-  // TODO: Debounce save functions.
-  async save (_, document) {
-    document = {
-      ...document,
-      ...{
-        content: await SEA.encrypt(document.content, user._.sea),
-        text: await SEA.encrypt(document.text, user._.sea)
-      }
-    }
-
-    // TODO: Refactor - this seems incredibly verbose
-    // First, get the document as it exists in graph.
-    user.get(scope)
-      .get('documents')
-      .get(document.id)
-      .once((prev) => {
-        // If document exists, store previous updatedAt.
-        const previouslyUpdatedAt = prev ? prev.updatedAt : null
-        // Then, insert the modified document.
-        user.get(scope)
-          .get('documents')
-          .get(document.id)
-          .put(document, () => {
-            // Retrieve the newly saved document node.
-            const documentNode = user.get(scope)
-              .get('documents')
-              .get(document.id)
-
-            // Nullify the previous updatedAt.
-            if (previouslyUpdatedAt) {
-              user.get(scope)
-                .get('trees')
-                .get('timestamps')
-                .get(previouslyUpdatedAt)
-                .get('updatedAt')
-                .get(document.id)
-                .put(null)
-            }
-
-            // Store node reference in the time tree for createdAt and updatedAt.
-            timestamps.forEach(timestamp => {
-              user.get(scope)
-                .get('trees')
-                .get('timestamps')
-                .get(document[timestamp])
-                .get(timestamp)
-                .get(document.id)
-                .put(documentNode)
-            })
-          })
-      })
+  save (_, document) {
+    debouncedSave(document)
   },
 
   destroy ({ commit }, id) {

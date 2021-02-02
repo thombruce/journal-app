@@ -12,10 +12,10 @@ const actions = {
   },
 
   show ({ commit }, id) {
-    commit('setCurrent', id)
+    commit('setCurrent', id) // TODO: Clear current when destroyed or navigated away from.
   },
 
-  create ({ dispatch, commit, rootState }, document) {
+  create ({ dispatch, commit }, document) {
     const id = uuidv4()
     const timestamp = new Date().getTime()
 
@@ -27,16 +27,12 @@ const actions = {
 
     commit('insert', document)
 
-    if (rootState.account.user) {
-      dispatch('graph/save', document, { root: true })
-    } else {
-      dispatch('local/save', document, { root: true })
-    }
+    dispatch('save')
 
     router.push({ name: 'EditDocument', params: { id: document.id } })
   },
 
-  update ({ dispatch, commit, state, rootState }, document) {
+  update ({ dispatch, commit, state }, document) {
     const timestamp = new Date().getTime()
 
     document = {
@@ -47,11 +43,7 @@ const actions = {
 
     commit('insert', document)
 
-    if (rootState.account.user) {
-      dispatch('graph/save', document, { root: true })
-    } else {
-      dispatch('local/save', document, { root: true })
-    }
+    dispatch('save')
   },
 
   destroy ({ dispatch, commit, rootState }, id) {
@@ -64,6 +56,17 @@ const actions = {
     }
 
     router.push({ name: 'Documents' })
+  },
+
+  save ({ dispatch, getters, rootState }) {
+    const document = getters.current
+    if (document) {
+      if (rootState.account.user) {
+        dispatch('graph/save', document, { root: true })
+      } else {
+        dispatch('local/save', document, { root: true })
+      }
+    }
   },
 
   clear ({ commit }) {

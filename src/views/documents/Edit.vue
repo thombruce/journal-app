@@ -37,7 +37,8 @@ export default {
       if (this.editor) this.teardownEditor()
       if (this.documentLoaded) this.initializeEditor()
     },
-    '$route.params.id' (id) {
+    async '$route.params.id' (id) {
+      await this.save()
       this.teardownEditor()
       this.show(id)
       this.initializeEditor()
@@ -50,7 +51,8 @@ export default {
 
   methods: {
     ...mapActions('documents', [
-      'show'
+      'show',
+      'save'
     ]),
     ...mapActions('editor', [
       'initializeEditor',

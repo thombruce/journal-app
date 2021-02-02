@@ -1,5 +1,7 @@
 import { Database } from '@/dexie.js'
 
+import { debouncedSave } from './functions'
+
 const db = new Database()
 
 const actions = {
@@ -18,12 +20,8 @@ const actions = {
       })
   },
 
-  async save (_, document) {
-    if (await db.documents.get(document.id)) {
-      db.documents.update(document.id, document)
-    } else {
-      db.documents.add(document)
-    }
+  save (_, document) {
+    debouncedSave(document)
   },
 
   destroy (_, id) {
