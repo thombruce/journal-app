@@ -19,6 +19,7 @@ const actions = {
     user.get(scope)
       .get('trees')
       .get('timestamps')
+      // TODO: Uncomment lex to deactivate; Investigate why order is incorrect.
       .get({ '.': { '<': new Date().getTime(), '-': 1 }, '%': 100000 }) // 100000 appears to be the max byte limit.
       .map()
       .get('modifiedAt')
