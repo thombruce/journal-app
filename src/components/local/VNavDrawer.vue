@@ -5,8 +5,8 @@
     clipped
     :mobile-breakpoint="$vuetify.breakpoint.thresholds.sm"
   )
-    //- template(v-slot:prepend)
-    //-   VNavSearch
+    template(v-slot:prepend)
+      VNavSearch
 
     VList
       VListItemGroup
@@ -39,7 +39,7 @@ import { mapGetters, mapMutations } from 'vuex'
 
 import { createHelpers } from 'vuex-map-fields'
 
-// import VNavSearch from '@/components/local/VNavSearch'
+import VNavSearch from '@/components/local/VNavSearch'
 
 import VDarkmodeToggle from '@/components/controls/VDarkmodeToggle'
 import VFullscreenToggle from '@/components/controls/VFullscreenToggle'
@@ -51,7 +51,7 @@ const { mapFields } = createHelpers({
 
 export default {
   components: {
-    // VNavSearch,
+    VNavSearch,
     VDarkmodeToggle,
     VFullscreenToggle
   },

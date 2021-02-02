@@ -38,6 +38,32 @@ const actions = {
       })
   },
 
+  async search ({ commit }, query) {
+    const words = query.toLowerCase().split(' ').filter(item => item)
+
+    user.get(scope)
+      .get('documents')
+      .map()
+      .on(async (document) => {
+        if (document) {
+          document = {
+            ...document,
+            ...{
+              content: await SEA.decrypt(document.content, user._.sea),
+              text: await SEA.decrypt(document.text, user._.sea)
+            }
+          }
+
+          const documentWords = document.text.toLowerCase().split(' ').filter(item => item)
+
+          if (words.every(value => documentWords.some(word => word.startsWith(value)))) {
+            commit('documents/insert', document, { root: true })
+            commit('documents/pushQueried', [document.id], { root: true })
+          }
+        }
+      })
+  },
+
   save (_, document) {
     save(document)
   },

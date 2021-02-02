@@ -20,6 +20,22 @@ const actions = {
       })
   },
 
+  async search ({ commit }, query) {
+    const words = query.toLowerCase().split(' ').filter(item => item)
+
+    const documentsArray = words.length > 0 ? await db.searchDocuments(words) : []
+
+    // Convert documents from Array to Object: { [id]: { ...document }, [id]: { ...document } }
+    const documents = documentsArray.reduce((obj, item) => {
+      obj[item.id] = item
+      return obj
+    }, {})
+
+    commit('documents/push', documents, { root: true })
+    const ids = documentsArray.map(document => document.id)
+    commit('documents/pushQueried', ids, { root: true })
+  },
+
   save (_, document) {
     save(document)
   },

@@ -5,6 +5,10 @@ const mutations = {
     state.list = { ...state.list, ...documents }
   },
 
+  pushQueried (state, ids) {
+    state.queried = [...state.queried, ...ids]
+  },
+
   insert (state, payload) {
     Vue.set(state.list, payload.id, payload)
   },
@@ -23,6 +27,11 @@ const mutations = {
 
   clear (state) {
     state.list = {}
+  },
+
+  setQuery (state, query) {
+    state.query = query
+    state.queried = []
   }
 }
 
