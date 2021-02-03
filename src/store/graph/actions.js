@@ -1,10 +1,6 @@
-import SEA from 'gun/sea'
-
 import { user, scope } from '@/gun'
 
-import { save } from './functions'
-
-const timestamps = ['createdAt', 'modifiedAt']
+import { index, search, save, nullTimestamps } from './functions'
 
 const actions = {
   init () {
@@ -16,52 +12,16 @@ const actions = {
   },
 
   index ({ commit }) {
-    user.get(scope)
-      .get('trees')
-      .get('timestamps')
-      // TODO: Uncomment lex to deactivate; Investigate why order is incorrect.
-      .get({ '.': { '<': new Date().getTime(), '-': 1 }, '%': 100000 }) // 100000 appears to be the max byte limit.
-      .map()
-      .get('modifiedAt')
-      .map()
-      .on(async (document) => {
-        if (document) {
-          document = {
-            ...document,
-            ...{
-              content: await SEA.decrypt(document.content, user._.sea),
-              text: await SEA.decrypt(document.text, user._.sea)
-            }
-          }
-          commit('documents/insert', document, { root: true })
-        }
-      })
+    index((document) => {
+      commit('documents/insert', document, { root: true })
+    })
   },
 
   async search ({ commit }, query) {
-    const words = query.toLowerCase().split(' ').filter(item => item)
-
-    user.get(scope)
-      .get('documents')
-      .map()
-      .on(async (document) => {
-        if (document) {
-          document = {
-            ...document,
-            ...{
-              content: await SEA.decrypt(document.content, user._.sea),
-              text: await SEA.decrypt(document.text, user._.sea)
-            }
-          }
-
-          const documentWords = document.text.toLowerCase().split(' ').filter(item => item)
-
-          if (words.every(value => documentWords.some(word => word.startsWith(value)))) {
-            commit('documents/insert', document, { root: true })
-            commit('documents/pushQueried', [document.id], { root: true })
-          }
-        }
-      })
+    search(query, (document) => {
+      commit('documents/insert', document, { root: true })
+      commit('documents/pushQueried', [document.id], { root: true })
+    })
   },
 
   save (_, document) {
@@ -81,15 +41,7 @@ const actions = {
           .get(id)
 
         // Nullify node reference in the time tree for createdAt and modifiedAt.
-        timestamps.forEach(timestamp => {
-          user.get(scope)
-            .get('trees')
-            .get('timestamps')
-            .get(document[timestamp])
-            .get(timestamp)
-            .get(document._['#'])
-            .put(null)
-        })
+        nullTimestamps(document)
 
         // Nullify the main document.
         documentNode.put(null)
