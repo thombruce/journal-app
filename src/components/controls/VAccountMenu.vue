@@ -6,7 +6,7 @@
         v-bind="attrs"
         v-on="on"
       )
-        VIcon(v-if="user") mdi-account
+        VIcon(v-if="authenticated") mdi-account
         VIcon(v-else) mdi-account-off
 
     VCard
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 import VAccountForm from './VAccountMenu/VAccountForm'
 import VLoginForm from './VAccountMenu/VLoginForm'
@@ -35,8 +35,8 @@ export default {
   },
 
   computed: {
-    ...mapState('account', [
-      'user'
+    ...mapGetters('account', [
+      'authenticated'
     ]),
 
     layout () {
@@ -44,7 +44,7 @@ export default {
     },
 
     view () {
-      return this.user ? 'account' : this.loggedOutView
+      return this.authenticated ? 'account' : this.loggedOutView
     }
   },
 

@@ -6,7 +6,7 @@ const actions = {
   login ({ dispatch, commit }, { username, password }) {
     commit('clearErrors')
     user.auth(username, password, (ack) => {
-      dispatch('authenticated', ack)
+      dispatch('authenticated')
     })
   },
 
@@ -30,8 +30,7 @@ const actions = {
     }, { change: newPassword })
   },
 
-  authenticated ({ dispatch, commit }, ack) {
-    commit('setUser', ack.put)
+  authenticated ({ dispatch }) {
     dispatch('graph/init', null, { root: true })
     dispatch('local/sync', null, { root: true })
   },

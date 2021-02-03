@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { user } from '@/gun'
+import { gun, user } from '@/gun'
 
 import { mapActions } from 'vuex'
 
@@ -32,11 +32,17 @@ export default {
   data () {
     return {
       user: {
-        username: user.is.alias,
+        username: '',
         password: '',
         newPassword: ''
       }
     }
+  },
+
+  created () {
+    gun.get(user._.soul).once((user) => {
+      this.user.username = user.alias
+    })
   },
 
   methods: {

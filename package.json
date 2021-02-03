@@ -16,7 +16,7 @@
     "core-js": "^3.6.5",
     "dexie": "^3.0.3",
     "dexie-observable": "^3.0.0-beta.10",
-    "gun": "^0.2020.520",
+    "gun": "https://github.com/thombruce/gun",
     "is-electron": "^2.2.0",
     "lodash": "^4.17.20",
     "register-service-worker": "^1.7.1",

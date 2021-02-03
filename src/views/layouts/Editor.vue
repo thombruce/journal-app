@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 import VNavBar from '@/components/local/VNavBar.vue'
 import VNavDrawer from '@/components/local/VNavDrawer'
@@ -40,10 +40,10 @@ export default {
   },
   computed: {
     snackbar () {
-      return this.user ? false : this.snackActive
+      return this.authenticated ? false : this.snackActive
     },
-    ...mapState('account', [
-      'user'
+    ...mapGetters('account', [
+      'authenticated'
     ])
   }
 }

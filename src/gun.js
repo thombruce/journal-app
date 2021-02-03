@@ -18,8 +18,8 @@ const peers = process.env.VUE_APP_PEERS && process.env.VUE_APP_PEERS.split(',')
 /* Global Initialization */
 
 const gun = Gun({ peers, localStorage: false })
-const user = gun.user().recall({ sessionStorage: true }, (ack) => {
-  store.dispatch('account/authenticated', ack)
+const user = gun.user().recall({ sessionStorage: true }, () => {
+  store.dispatch('account/authenticated')
 })
 
 /* Export */
