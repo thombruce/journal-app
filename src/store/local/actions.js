@@ -53,6 +53,7 @@ const actions = {
       .toArray()
       .then(documents => {
         documents.forEach(document => {
+          delete document.textWords
           dispatch('graph/save', document, { root: true })
         })
         dispatch('clear')
