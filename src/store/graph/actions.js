@@ -87,7 +87,7 @@ const actions = {
             .get('timestamps')
             .get(document[timestamp])
             .get(timestamp)
-            .get(document.id)
+            .get(document._['#'])
             .put(null)
         })
 

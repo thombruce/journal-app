@@ -57,7 +57,7 @@ const updateTimestamps = function (document, documentNode, previouslyModifiedAt)
     .get('timestamps')
     .get(previouslyModifiedAt)
     .get('modifiedAt')
-    .get(document.id)
+    .get(document._['#'])
     .put(null)
   // Store node reference in the time tree for new modifiedAt.
   insertTimestamp(document, documentNode, 'modifiedAt')
@@ -70,8 +70,7 @@ const insertTimestamp = function (document, documentNode, timestamp) {
     .get('timestamps')
     .get(document[timestamp])
     .get(timestamp)
-    .get(document.id)
-    .put(documentNode)
+    .set(documentNode)
 }
 
 const encryptDocument = async function (document) {
