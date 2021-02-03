@@ -1,6 +1,6 @@
 import { user, scope } from '@/gun'
 
-import { index, search, save, nullTimestamps } from './functions'
+import { index, show, search, save, nullTimestamps } from './functions'
 
 const actions = {
   init () {
@@ -13,6 +13,12 @@ const actions = {
 
   index ({ commit }) {
     index((document) => {
+      commit('documents/insert', document, { root: true })
+    })
+  },
+
+  show ({ commit }, id) {
+    show(id, (document) => {
       commit('documents/insert', document, { root: true })
     })
   },

@@ -1,6 +1,6 @@
 export { default as debouncedSave } from './debouncedSave'
 
-export { index, search } from './query'
+export { index, show, search } from './query'
 
 export { default as save } from './save'
 

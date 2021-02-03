@@ -19,6 +19,18 @@ const index = function (callback) {
     })
 }
 
+const show = function (id, callback) {
+  user.get(scope)
+    .get('documents')
+    .get(id)
+    .once(async (document) => {
+      if (document) {
+        document = await decrypt(document)
+        callback(document)
+      }
+    })
+}
+
 const search = function (query, callback) {
   const words = query.toLowerCase().split(' ').filter(item => item)
 
@@ -38,4 +50,4 @@ const search = function (query, callback) {
     })
 }
 
-export { index, search }
+export { index, show, search }

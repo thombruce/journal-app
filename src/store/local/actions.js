@@ -20,6 +20,14 @@ const actions = {
       })
   },
 
+  show ({ commit }, id) {
+    db.documents
+      .get(id)
+      .then(document => {
+        if (document) commit('documents/insert', document, { root: true })
+      })
+  },
+
   async search ({ commit }, query) {
     const words = query.toLowerCase().split(' ').filter(item => item)
 

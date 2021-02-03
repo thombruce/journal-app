@@ -22,7 +22,12 @@ const actions = {
     }
   },
 
-  show ({ commit }, id) {
+  show ({ dispatch, commit, rootState }, id) {
+    if (rootState.account.user) {
+      dispatch('graph/show', id, { root: true })
+    } else {
+      dispatch('local/show', id, { root: true })
+    }
     commit('setCurrent', id) // TODO: Clear current when destroyed or navigated away from.
   },
 
@@ -46,7 +51,7 @@ const actions = {
     dispatch('save')
     commit('editor/markAsModified', null, { root: true })
 
-    router.push({ name: 'EditDocument', params: { id: document.id } })
+    router.push({ name: 'EditDocument', params: { id: document.id, new: true } })
   },
 
   update ({ commit, state, rootState }, document) {

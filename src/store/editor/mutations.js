@@ -7,10 +7,13 @@ const mutations = {
     state.modified = true
   },
 
+  unmarkModified (state) {
+    state.modified = false
+  },
+
   deinit (state) {
     state.editor.destroy()
     state.editor = null
-    state.modified = false
   }
 }
 
