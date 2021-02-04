@@ -1,8 +1,6 @@
-import { user } from '@/gun'
-
 const getters = {
-  authenticated () {
-    return user.is
+  authenticated (state) {
+    return state.authenticated
   }
 }
 

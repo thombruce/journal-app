@@ -1,6 +1,9 @@
 import Vue from 'vue'
 
 const mutations = {
+  authenticated (state, val) {
+    state.authenticated = val
+  },
   addError (state, payload) {
     for (const [key, value] of Object.entries(payload)) {
       const arr = state.errors[key] || []

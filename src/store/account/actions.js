@@ -30,14 +30,15 @@ const actions = {
     }, { change: newPassword })
   },
 
-  authenticated ({ dispatch }) {
+  authenticated ({ dispatch, commit }) {
+    commit('authenticated', true)
     dispatch('graph/init', null, { root: true })
     dispatch('local/sync', null, { root: true })
   },
 
   logout ({ commit }) {
     commit('clearErrors')
-    commit('setUser', null)
+    commit('authenticated', false)
     user.leave()
     router.push({ name: 'Documents' })
   }
