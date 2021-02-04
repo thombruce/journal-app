@@ -9,7 +9,10 @@
       VNavSearch
 
     VList
-      VListItemGroup
+      VListItemGroup(
+        v-infinite-scroll="loadMore"
+        infinite-scroll-distance="50"
+      )
         VListItem(
           v-for="document in documents"
           :key="document.id"
@@ -35,7 +38,7 @@
 <script>
 import isElectron from 'is-electron'
 
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 
 import { createHelpers } from 'vuex-map-fields'
 
@@ -56,12 +59,6 @@ export default {
     VFullscreenToggle
   },
 
-  data () {
-    return {
-      busy: false
-    }
-  },
-
   computed: {
     ...mapGetters('documents', {
       documents: 'all'
@@ -71,6 +68,10 @@ export default {
     ]),
     isElectron () {
       return isElectron()
+    },
+    offset () {
+      const lastDoc = this.documents[this.documents.length - 1]
+      return lastDoc && lastDoc.modifiedAt
     }
   },
 
@@ -82,8 +83,16 @@ export default {
     ...mapMutations('ui', [
       'toggleDrawer'
     ]),
+    ...mapActions('documents', [
+      'index'
+    ]),
     toggleOnMobile () {
       if (this.$vuetify.breakpoint.smAndDown) this.toggleDrawer()
+    },
+    loadMore () {
+      this.index({
+        offset: this.offset
+      })
     }
   }
 }

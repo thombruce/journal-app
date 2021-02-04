@@ -21,16 +21,8 @@ export default {
 
   watch: {
     authenticated () {
-      if (this.authenticated) {
-        this.index()
-      } else {
-        this.clear()
-      }
+      if (!this.authenticated) this.clear()
     }
-  },
-
-  created () {
-    this.index()
   }
 }
 </script>

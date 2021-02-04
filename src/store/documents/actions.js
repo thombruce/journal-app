@@ -6,14 +6,11 @@ import { Database } from '@/dexie.js'
 const db = new Database()
 
 const actions = {
-  // NOTE: Offset for Dexie would be an integer.
-  //       Offset for Gun would be last retrieved key (modifiedAt).
-  index ({ dispatch, rootGetters }) {
+  index ({ dispatch, rootGetters }, params = {}) {
     if (rootGetters['account/authenticated']) {
-      // We pass the callback forward, to ensure it triggers only after retrieval.
-      dispatch('graph/index', null, { root: true })
+      dispatch('graph/index', params, { root: true })
     } else {
-      dispatch('local/index', null, { root: true })
+      dispatch('local/index', params, { root: true })
     }
   },
 

@@ -5,7 +5,7 @@ import { save } from './functions'
 const db = new Database()
 
 const actions = {
-  index ({ commit }) {
+  index ({ commit }, params = {}) {
     db.documents
       .toArray(documents => {
         // Convert documents from Array to Object: { [id]: { ...document }, [id]: { ...document } }

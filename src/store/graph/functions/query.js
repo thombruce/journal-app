@@ -2,17 +2,18 @@ import { user, scope } from '@/gun'
 
 import { decrypt } from './encrypt'
 
-const index = function (callback) {
+const index = function (args, callback) {
+  const offset = args.offset || new Date().getTime()
+
   user.get(scope)
-    .get('trees')
+    .get('trees', tree => tree)
     .get('timestamps')
-    // This works now, but we need to implement pagination for the full
-    // benefit.
-    .get({ '.': { '<': new Date().getTime(), '-': 1 }, '%': 50000 })
+    .get({ '.': { '<': offset, '-': 1 }, '%': 50000 })
+    .once(timestamps => timestamps)
     .map()
     .get('modifiedAt')
     .map()
-    .on(async (document) => {
+    .once(async (document) => {
       if (document) {
         document = await decrypt(document)
         callback(document)

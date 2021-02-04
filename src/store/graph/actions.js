@@ -11,8 +11,8 @@ const actions = {
     user.get(scope).get('trees').get('timestamps').put({})
   },
 
-  index ({ commit }) {
-    index((document) => {
+  index ({ commit }, params = {}) {
+    index(params, (document) => {
       commit('documents/insert', document, { root: true })
     })
   },
