@@ -2,15 +2,10 @@ import router from '@/router'
 
 import { v4 as uuidv4 } from 'uuid'
 
-import { Database } from '@/dexie.js'
-const db = new Database()
-
 const actions = {
   index ({ dispatch, rootGetters }, params = {}) {
     if (rootGetters['account/authenticated']) {
       dispatch('graph/index', params, { root: true })
-    } else {
-      dispatch('local/index', params, { root: true })
     }
   },
 
@@ -25,8 +20,6 @@ const actions = {
   show ({ dispatch, commit, rootGetters }, id) {
     if (rootGetters['account/authenticated']) {
       dispatch('graph/show', id, { root: true })
-    } else {
-      dispatch('local/show', id, { root: true })
     }
     commit('setCurrent', id) // TODO: Clear current when destroyed or navigated away from.
   },
@@ -47,7 +40,7 @@ const actions = {
 
     commit('insert', document)
     commit('setCurrent', id)
-    if (!rootGetters['account/authenticated']) db.documents.add(document)
+    //
     dispatch('save')
     commit('editor/markAsModified', null, { root: true })
 
@@ -76,8 +69,6 @@ const actions = {
   destroy ({ dispatch, commit, rootGetters }, id) {
     if (rootGetters['account/authenticated']) {
       dispatch('graph/destroy', id, { root: true })
-    } else {
-      dispatch('local/destroy', id, { root: true })
     }
 
     commit('delete', id)
@@ -87,12 +78,8 @@ const actions = {
 
   save ({ dispatch, getters, rootGetters }) {
     const document = getters.current
-    if (document) {
-      if (rootGetters['account/authenticated']) {
-        dispatch('graph/save', document, { root: true })
-      } else {
-        dispatch('local/save', document, { root: true })
-      }
+    if (document && rootGetters['account/authenticated']) {
+      dispatch('graph/save', document, { root: true })
     }
   },
 

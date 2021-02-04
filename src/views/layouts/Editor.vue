@@ -12,7 +12,7 @@
       :timeout="-1"
       color="error"
     )
-      | Documents will not be encrypted until you sign in.
+      | Documents will not be saved until you sign in.
       template(v-slot:action="{ attrs }")
         VBtn(
           icon
