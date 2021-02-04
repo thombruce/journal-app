@@ -6,24 +6,27 @@ import { Database } from '@/dexie.js'
 const db = new Database()
 
 const actions = {
-  index ({ dispatch, rootState }) {
-    if (rootState.account.user) {
+  // NOTE: Offset for Dexie would be an integer.
+  //       Offset for Gun would be last retrieved key (modifiedAt).
+  index ({ dispatch, rootGetters }) {
+    if (rootGetters['account/authenticated']) {
+      // We pass the callback forward, to ensure it triggers only after retrieval.
       dispatch('graph/index', null, { root: true })
     } else {
       dispatch('local/index', null, { root: true })
     }
   },
 
-  search ({ dispatch, state, rootState }) {
-    if (rootState.account.user) {
+  search ({ dispatch, state, rootGetters }) {
+    if (rootGetters['account/authenticated']) {
       dispatch('graph/search', state.query, { root: true })
     } else {
       dispatch('local/search', state.query, { root: true })
     }
   },
 
-  show ({ dispatch, commit, rootState }, id) {
-    if (rootState.account.user) {
+  show ({ dispatch, commit, rootGetters }, id) {
+    if (rootGetters['account/authenticated']) {
       dispatch('graph/show', id, { root: true })
     } else {
       dispatch('local/show', id, { root: true })
@@ -31,7 +34,7 @@ const actions = {
     commit('setCurrent', id) // TODO: Clear current when destroyed or navigated away from.
   },
 
-  create ({ dispatch, commit, rootState }, document) {
+  create ({ dispatch, commit, rootGetters }, document) {
     const id = uuidv4()
     const timestamp = new Date().getTime()
 
@@ -47,7 +50,7 @@ const actions = {
 
     commit('insert', document)
     commit('setCurrent', id)
-    if (!rootState.account.user) db.documents.add(document)
+    if (!rootGetters['account/authenticated']) db.documents.add(document)
     dispatch('save')
     commit('editor/markAsModified', null, { root: true })
 
@@ -73,8 +76,8 @@ const actions = {
     return true
   },
 
-  destroy ({ dispatch, commit, rootState }, id) {
-    if (rootState.account.user) {
+  destroy ({ dispatch, commit, rootGetters }, id) {
+    if (rootGetters['account/authenticated']) {
       dispatch('graph/destroy', id, { root: true })
     } else {
       dispatch('local/destroy', id, { root: true })
@@ -85,10 +88,10 @@ const actions = {
     router.push({ name: 'Documents' })
   },
 
-  save ({ dispatch, getters, rootState }) {
+  save ({ dispatch, getters, rootGetters }) {
     const document = getters.current
     if (document) {
-      if (rootState.account.user) {
+      if (rootGetters['account/authenticated']) {
         dispatch('graph/save', document, { root: true })
       } else {
         dispatch('local/save', document, { root: true })
