@@ -38,7 +38,7 @@
 <script>
 import isElectron from 'is-electron'
 
-import { mapGetters, mapActions, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 
 import { createHelpers } from 'vuex-map-fields'
 
@@ -60,6 +60,9 @@ export default {
   },
 
   computed: {
+    ...mapState('documents', [
+      'query'
+    ]),
     ...mapGetters('documents', {
       documents: 'all'
     }),
@@ -90,9 +93,7 @@ export default {
       if (this.$vuetify.breakpoint.smAndDown) this.toggleDrawer()
     },
     loadMore () {
-      this.index({
-        offset: this.offset
-      })
+      if (!this.query) this.index()
     }
   }
 }

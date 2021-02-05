@@ -1,6 +1,6 @@
 const getters = {
   all: (state, getters, _rootState, _rootGetters) => {
-    const documents = state.query !== '' ? getters.queried : getters.indexed
+    const documents = state.query ? getters.queried : getters.indexed
 
     return documents.sort((a, b) => {
       return b.updatedAt - a.updatedAt

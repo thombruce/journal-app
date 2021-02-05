@@ -23,7 +23,7 @@ const actions = {
     })
   },
 
-  async search ({ commit }, query) {
+  search ({ commit }, query) {
     search(query, (document) => {
       commit('documents/insert', document, { root: true })
       commit('documents/pushQueried', [document.id], { root: true })

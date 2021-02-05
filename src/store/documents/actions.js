@@ -3,9 +3,11 @@ import router from '@/router'
 import { v4 as uuidv4 } from 'uuid'
 
 const actions = {
-  index ({ dispatch, rootGetters }, params = {}) {
+  index ({ dispatch, getters, rootGetters }) {
     if (rootGetters['account/authenticated']) {
-      dispatch('graph/index', params, { root: true })
+      const lastDoc = getters.all[getters.all.length - 1]
+      const offset = lastDoc && lastDoc.modifiedAt
+      dispatch('graph/index', { offset }, { root: true })
     }
   },
 
@@ -87,7 +89,7 @@ const actions = {
     commit('clear')
   },
 
-  async updateQuery ({ dispatch, commit }, query) {
+  updateQuery ({ dispatch, commit }, query) {
     commit('setQuery', query)
     dispatch('search')
   }
