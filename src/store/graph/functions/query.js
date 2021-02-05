@@ -6,10 +6,10 @@ const index = function (args, callback) {
   const offset = args.offset || new Date().getTime()
 
   user.get(scope)
-    .get('trees', tree => tree)
+    .get('trees', () => {})
     .get('timestamps')
     .get({ '.': { '<': offset, '-': 1 }, '%': 50000 })
-    .once(timestamps => timestamps)
+    .once(() => {})
     .map()
     .get('modifiedAt')
     .map()
