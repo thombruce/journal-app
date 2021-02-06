@@ -12,8 +12,8 @@ import 'gun/sea'
 import store from './store'
 
 /* Variables */
-const scope = process.env.VUE_APP_NAMESPACE || 'com.thombruce.journal'
 const peers = process.env.VUE_APP_PEERS && process.env.VUE_APP_PEERS.split(',')
+const scope = process.env.VUE_APP_NAMESPACE || 'dev.helvellyn.gun'
 
 /* Global Initialization */
 
