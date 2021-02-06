@@ -19,37 +19,24 @@ export default {
     ]),
     ...mapGetters('documents', {
       document: 'current'
-    }),
-    documentLoaded () {
-      return !!this.document
-    }
-  },
-
-  mounted () {
-    // TODO: Refactor initial document loading
-    this.show(this.$route.params.id)
-    if (this.documentLoaded) this.initializeEditor()
+    })
   },
 
   watch: {
-    documentLoaded () {
-      // TODO: Refactor initial document loading
-      if (this.editor) this.teardownEditor()
-      if (this.documentLoaded) this.initializeEditor()
+    $route: {
+      immediate: true,
+      handler: async function (to, _from) {
+        if (this.document) await this.save()
+        if (this.editor) this.teardownEditor()
+        await this.show(to.params.id)
+        if (!to.params.new) this.unmarkModified()
+      }
     }
-  },
-
-  async beforeRouteUpdate (to, from, next) {
-    await this.save()
-    this.teardownEditor()
-    next()
-    this.show(to.params.id)
-    if (!to.params.new) this.unmarkModified()
-    this.initializeEditor()
   },
 
   beforeDestroy () {
     this.teardownEditor()
+    this.setCurrent(null)
   },
 
   methods: {
@@ -60,6 +47,9 @@ export default {
     ...mapActions('editor', [
       'initializeEditor',
       'teardownEditor'
+    ]),
+    ...mapMutations('documents', [
+      'setCurrent'
     ]),
     ...mapMutations('editor', [
       'unmarkModified'

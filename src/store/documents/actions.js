@@ -23,7 +23,7 @@ const actions = {
     if (rootGetters['account/authenticated']) {
       dispatch('graph/show', id, { root: true })
     }
-    commit('setCurrent', id) // TODO: Clear current when destroyed or navigated away from.
+    commit('setCurrent', id)
   },
 
   create ({ dispatch, commit, rootGetters }, document) {

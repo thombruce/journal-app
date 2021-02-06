@@ -17,9 +17,10 @@ const actions = {
     })
   },
 
-  show ({ commit }, id) {
+  show ({ dispatch, commit }, id) {
     show(id, (document) => {
       commit('documents/insert', document, { root: true })
+      dispatch('editor/initializeEditor', null, { root: true })
     })
   },
 
