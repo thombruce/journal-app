@@ -23,8 +23,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 import VNavBar from '@/components/local/VNavBar.vue'
 import VNavDrawer from '@/components/local/VNavDrawer'
 
@@ -40,11 +38,8 @@ export default {
   },
   computed: {
     snackbar () {
-      return this.authenticated ? false : this.snackActive
-    },
-    ...mapGetters('account', [
-      'authenticated'
-    ])
+      return this.$user.authenticated ? false : this.snackActive
+    }
   }
 }
 </script>

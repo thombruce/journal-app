@@ -1,11 +1,11 @@
-import { user, scope } from '@/gun'
+import { userDb } from '@/plugins/helvellyn-vue'
 
 import { decrypt } from './encrypt'
 
 const index = function (args, callback) {
   const offset = args.offset || new Date().getTime()
 
-  user.get(scope)
+  userDb
     .get('trees', () => {})
     .get('timestamps')
     .get({ '.': { '<': offset, '-': 1 }, '%': 50000 })
@@ -22,7 +22,7 @@ const index = function (args, callback) {
 }
 
 const show = function (id, callback) {
-  user.get(scope)
+  userDb
     .get('documents')
     .get(id)
     .once(async (document) => {
@@ -36,7 +36,7 @@ const show = function (id, callback) {
 const search = function (query, callback) {
   const words = query.toLowerCase().split(' ').filter(item => item)
 
-  user.get(scope)
+  userDb
     .get('documents')
     .map()
     .on(async (document) => {

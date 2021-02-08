@@ -31,6 +31,9 @@ export default {
         await this.show(to.params.id)
         if (!to.params.new) this.unmarkModified()
       }
+    },
+    '$user.authenticated' () {
+      if (this.$user.authenticated && !this.document) this.show(this.$route.params.id)
     }
   },
 

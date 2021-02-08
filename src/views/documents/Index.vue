@@ -3,15 +3,9 @@ RouterView(v-if="$route.params.id")
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
-  computed: {
-    ...mapGetters('account', [
-      'authenticated'
-    ])
-  },
-
   methods: {
     ...mapActions('documents', [
       'index',
@@ -20,8 +14,12 @@ export default {
   },
 
   watch: {
-    authenticated () {
-      if (!this.authenticated) this.clear()
+    '$user.authenticated' () {
+      if (this.$user.authenticated) {
+        this.index()
+      } else {
+        this.clear()
+      }
     }
   }
 }

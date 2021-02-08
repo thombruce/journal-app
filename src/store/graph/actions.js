@@ -1,4 +1,4 @@
-import { user, scope } from '@/gun'
+import { userDb } from '@/plugins/helvellyn-vue'
 
 import { index, show, search, save, nullTimestamps } from './functions'
 
@@ -8,7 +8,7 @@ const actions = {
     // first initialize the queried objects. So do that here.
     // See also [1]. Solution derived from:
     // https://github.com/amark/gun/issues/690#issuecomment-455115069
-    user.get(scope).get('trees').get('timestamps').put({})
+    userDb.get('trees').get('timestamps').put({})
   },
 
   index ({ commit }, params = {}) {
@@ -38,12 +38,12 @@ const actions = {
   destroy ({ commit }, id) {
     // TODO: Refactor - this seems incredibly verbose
     // First, get the document as it exists in graph.
-    user.get(scope)
+    userDb
       .get('documents')
       .get(id)
       .once((document) => {
         // Retrieve the document node.
-        const documentNode = user.get(scope)
+        const documentNode = userDb
           .get('documents')
           .get(id)
 

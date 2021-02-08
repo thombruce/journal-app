@@ -44,9 +44,6 @@ import { createHelpers } from 'vuex-map-fields'
 
 import VNavSearch from '@/components/local/VNavSearch'
 
-import VDarkmodeToggle from '@/components/controls/VDarkmodeToggle'
-import VFullscreenToggle from '@/components/controls/VFullscreenToggle'
-
 const { mapFields } = createHelpers({
   getterType: 'ui/getField',
   mutationType: 'ui/updateField'
@@ -54,9 +51,7 @@ const { mapFields } = createHelpers({
 
 export default {
   components: {
-    VNavSearch,
-    VDarkmodeToggle,
-    VFullscreenToggle
+    VNavSearch
   },
 
   computed: {

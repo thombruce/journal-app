@@ -1,4 +1,4 @@
-import { user, scope } from '@/gun'
+import { userDb } from '@/plugins/helvellyn-vue'
 
 const timestamps = ['createdAt', 'modifiedAt']
 
@@ -18,7 +18,7 @@ const updateTimestamps = function (document, documentNode, previouslyModifiedAt)
 
 const insertTimestamp = function (document, documentNode, timestamp) {
   // Store node reference in the time tree for given timestamp.
-  user.get(scope)
+  userDb
     .get('trees')
     .get('timestamps')
     .get(document[timestamp])
@@ -34,7 +34,7 @@ const nullTimestamps = function (document, atTimestamp) {
 
 const nullTimestamp = function (document, timestamp, atTimestamp) {
   // Nullify timestamp.
-  user.get(scope)
+  userDb
     .get('trees')
     .get('timestamps')
     .get(atTimestamp || document[timestamp])

@@ -1,10 +1,12 @@
+import { user } from '@/plugins/helvellyn-vue'
+
 import router from '@/router'
 
 import { v4 as uuidv4 } from 'uuid'
 
 const actions = {
   index ({ dispatch, getters, rootGetters }) {
-    if (rootGetters['account/authenticated']) {
+    if (user.authenticated) {
       const lastDoc = getters.all[getters.all.length - 1]
       const offset = lastDoc && lastDoc.modifiedAt
       dispatch('graph/index', { offset }, { root: true })
@@ -12,7 +14,7 @@ const actions = {
   },
 
   search ({ dispatch, state, rootGetters }) {
-    if (rootGetters['account/authenticated']) {
+    if (user.authenticated) {
       dispatch('graph/search', state.query, { root: true })
     } else {
       dispatch('local/search', state.query, { root: true })
@@ -20,7 +22,7 @@ const actions = {
   },
 
   show ({ dispatch, commit, rootGetters }, id) {
-    if (rootGetters['account/authenticated']) {
+    if (user.authenticated) {
       dispatch('graph/show', id, { root: true })
     }
     commit('setCurrent', id)
@@ -69,7 +71,7 @@ const actions = {
   },
 
   destroy ({ dispatch, commit, rootGetters }, id) {
-    if (rootGetters['account/authenticated']) {
+    if (user.authenticated) {
       dispatch('graph/destroy', id, { root: true })
     }
 
@@ -80,7 +82,7 @@ const actions = {
 
   save ({ dispatch, getters, rootGetters }) {
     const document = getters.current
-    if (document && rootGetters['account/authenticated']) {
+    if (document && user.authenticated) {
       dispatch('graph/save', document, { root: true })
     }
   },
