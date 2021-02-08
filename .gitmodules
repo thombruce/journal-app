@@ -1,0 +1,3 @@
+[submodule "src/plugins/helvellyn-vue"]
+	path = src/plugins/helvellyn-vue
+	url = https://github.com/thombruce/helvellyn-vue.git
