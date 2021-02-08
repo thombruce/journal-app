@@ -26,6 +26,9 @@ const actions = {
       dispatch('graph/show', id, { root: true })
     }
     commit('setCurrent', id)
+    if (!user.authenticated) {
+      dispatch('editor/initializeEditor', null, { root: true })
+    }
   },
 
   create ({ dispatch, commit, rootGetters }, document) {
