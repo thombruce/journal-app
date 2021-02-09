@@ -14,7 +14,15 @@ import './plugins/filters'
 
 Vue.config.productionTip = false
 
-Vue.use(HelvellynVue)
+Vue.use(
+  HelvellynVue,
+  {
+    onAuth: function () {
+      store.dispatch('graph/init')
+      store.dispatch('local/sync')
+    }
+  }
+)
 
 new Vue({
   router,
