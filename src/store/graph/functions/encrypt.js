@@ -1,6 +1,6 @@
 import SEA from 'gun/sea'
 
-import user from '@/plugins/helvellyn-vue/services/gun'
+import { user } from '@/plugins/helvellyn-vue/services/gun'
 
 const encrypt = async function (document) {
   const encrypted = {
