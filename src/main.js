@@ -7,6 +7,7 @@ import vuetify from './plugins/vuetify'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import '@mdi/font/css/materialdesignicons.css'
 
+import HelvellynGun from './plugins/helvellyn-gun'
 import HelvellynVue from './plugins/helvellyn-vue'
 
 import './plugins/infiniteScroll'
@@ -15,7 +16,7 @@ import './plugins/filters'
 Vue.config.productionTip = false
 
 Vue.use(
-  HelvellynVue,
+  HelvellynGun,
   {
     onAuth: function () {
       store.dispatch('graph/init')
@@ -23,6 +24,8 @@ Vue.use(
     }
   }
 )
+
+Vue.use(HelvellynVue)
 
 new Vue({
   router,
