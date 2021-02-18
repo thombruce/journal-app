@@ -1,4 +1,4 @@
-import { userDb } from '@/plugins/helvellyn-vue'
+import { userDb } from '@/plugins/helvellyn-gun'
 
 import { decrypt } from './encrypt'
 

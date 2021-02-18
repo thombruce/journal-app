@@ -1,4 +1,4 @@
-import { user } from '@/plugins/helvellyn-vue'
+import { user } from '@/plugins/helvellyn-gun'
 
 import router from '@/router'
 

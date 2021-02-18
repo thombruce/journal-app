@@ -1,4 +1,4 @@
-import { user } from '@/plugins/helvellyn-vue'
+import { user } from '@/plugins/helvellyn-gun'
 
 import { debouncedSave as graphSave } from '../graph/functions'
 

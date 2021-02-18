@@ -1,4 +1,4 @@
-import { userDb } from '@/plugins/helvellyn-vue'
+import { userDb } from '@/plugins/helvellyn-gun'
 
 import { index, show, search, save, nullTimestamps } from './functions'
 

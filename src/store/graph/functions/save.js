@@ -1,4 +1,4 @@
-import { userDb } from '@/plugins/helvellyn-vue'
+import { userDb } from '@/plugins/helvellyn-gun'
 
 import { encrypt } from './encrypt'
 import { createTimestamps, updateTimestamps } from './timestamps'
