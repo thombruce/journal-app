@@ -8,7 +8,7 @@ const index = function (args, callback) {
   userDb
     .get('trees', () => {})
     .get('timestamps')
-    .get({ '.': { '<': offset, '-': 1 }, '%': 50000 })
+    .get({ '.': { '<': offset }, '-': 1, '%': 50000 })
     .once(() => {})
     .map()
     .get('modifiedAt')
